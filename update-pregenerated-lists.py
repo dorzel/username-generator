@@ -15,11 +15,14 @@ def generate_existing_lists():
     # TODO: make this a general loop instead of having to name all corpora
     for corpus_name in ["treebank", "brown", "nps_chat", "masc_tagged",
                         "switchboard", "timit_tagged"]:
-        corpus = getattr(nltk.corpus, corpus_name)
-        # append data to tag types in dict
+        corpus = getattr(nltk.corpus, corpus_name, False)
         print("generating lists for '{}' corpus...".format(corpus_name))
-        for tag in corpus.tagged_words(tagset='universal'):
-            existing_word_tags[tag[-1]].append(tag[0])
+        if corpus:
+            for tag in corpus.tagged_words(tagset='universal'):
+                existing_word_tags[tag[-1]].append(tag[0])
+        else:
+            print("'{}' corpus not found. Downloading...".format(corpus_name))
+            nltk.download(corpus_name)
 
     # write results
     with open("pre-generated-lists/existing_word_tags.pkl", "wb") as outfile:
@@ -46,7 +49,7 @@ def generate_custom_lists():
                                    fileids=".txt")
         # tokenize and tag sentences
         p1.sents()
-        
+
     # write results
     with open("pre-generated-lists/custom_word_tags.pkl", "wb") as outfile:
         pickle.dump(custom_word_tags, outfile)
