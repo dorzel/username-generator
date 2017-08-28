@@ -42,3 +42,4 @@ Ideas:
 - be able to name types from different corporas, e.g.:
     - `python generate_username.py A Pokemon-N N`
     - `python generate_username.py N PetNames-V A`
+- be able to specify different types of usernames, e.g.: unusual, angry, happy
