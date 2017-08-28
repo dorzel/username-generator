@@ -10,25 +10,23 @@ sample output:
 
 ```
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-HealthierClerk
+SuchBorat
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-SureViews
+PlainPublications
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-MajesticSymbols
+TypicalChristians
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-MostStock-market
+MoralPic
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-LastBeef
+SeriousSums
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-SocialWorld
+AshamedConductor
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-EquivalentYears
+SexualCourse
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-FreeDrink
+RacialRick
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py ANVN
 ObviousSuicideIsPhoto
-dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py ANVN
-FirstGWouldGrainy
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py ANVN
 ManyOperatorLocatedBusinesses
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py ANVN
