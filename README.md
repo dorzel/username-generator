@@ -43,3 +43,5 @@ Ideas:
     - `python generate_username.py A Pokemon-N N`
     - `python generate_username.py N PetNames-V A`
 - be able to specify different types of usernames, e.g.: unusual, angry, happy
+- be able to set a part of the username beforehand:
+    - `python generate_username.py A Dog NV`
