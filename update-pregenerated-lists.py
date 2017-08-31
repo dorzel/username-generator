@@ -34,28 +34,33 @@ def generate_existing_lists():
 
 def generate_custom_lists():
     """ Same as generate_existing_lists, but on custom corpora that reside in
-    root/custom_corpora. Write a pickle
+    root/custom_corpora. Write a pickle file for each corpus. 
     """
     from nltk.corpus import PlaintextCorpusReader
     import os
 
-    custom_word_tags = defaultdict(list)
-
     for dir in os.listdir("custom-corpora/"):
+        custom_word_tags = defaultdict(list)
         print("generating list for custom corpus '{}'".format(dir))
-        # if this isn't parsing correctly, you can pass this a custom word
-        # tokenizer and a sentence tokenizer
-        p1 = PlaintextCorpusReader(root="custom-corpora/{}/".format(dir),
-                                   fileids=".txt")
+        custom_corpus = PlaintextCorpusReader(
+            root="custom-corpora/{}/".format(dir),
+            fileids=".*")
         # tokenize and tag sentences
-        p1.sents()
+        # this needs to be refactored to get the parsed sentences from
+        # custom_corpus.sents(). 
+        tags = get_tags_sentence(custom_corpus.raw())
+        for tag in tags:
+            custom_word_tags[tag[-1]].append(tag[0])
 
-    # write results
-    with open("pre-generated-lists/custom_word_tags.pkl", "wb") as outfile:
-        pickle.dump(custom_word_tags, outfile)
+        # write results
+        with open("pre-generated-lists/custom_word_tags_{}.pkl".format(dir),
+                  "wb") as outfile:
+            pickle.dump(custom_word_tags, outfile)
 
-    print("Done. {} total words saved".format(
-        sum([len(values) for values in custom_word_tags.values()])))
+        print("Completed dumping of `{}` custom corpus. {} total words saved"
+              .format(dir,
+                      sum([len(values) for values in custom_word_tags.values()]
+                          )))
 
 
 def get_tags_sentence(sentence):
@@ -65,8 +70,8 @@ def get_tags_sentence(sentence):
     tags = nltk.tag.pos_tag(nltk.tokenize.word_tokenize(sentence),
                             tagset='universal',
                             lang='eng')
-    return [tag for tag in tags if tag[-1] in ["NOUN", "ADJ", "VERB"]]
+    return [tag for tag in tags if tag[-1]]
 
 if __name__ == "__main__":
-    generate_existing_lists()
+    #generate_existing_lists()
     generate_custom_lists()
