@@ -40,15 +40,13 @@ def generate_custom_lists():
     import os
 
     for dir in os.listdir("custom-corpora/"):
-        custom_word_tags = defaultdict(list)
         print("generating list for custom corpus '{}'".format(dir))
+        custom_word_tags = defaultdict(list)
         custom_corpus = PlaintextCorpusReader(
             root="custom-corpora/{}/".format(dir),
             fileids=".*")
         # tokenize and tag sentences
-        # this needs to be refactored to get the parsed sentences from
-        # custom_corpus.sents(). 
-        tags = get_tags_sentence(custom_corpus.raw())
+        tags = get_tags_sentence([item for item in custom_corpus.sents()])
         for tag in tags:
             custom_word_tags[tag[-1]].append(tag[0])
 
@@ -65,13 +63,27 @@ def generate_custom_lists():
 
 def get_tags_sentence(sentence):
     """ Returns a list of (word, tag) tuples for every tag that is a noun,
-    verb, or adjective for the given sentence.
+    verb, or adjective for the given sentence. Accepts sentence as a raw string
+    or a list of sentences with each "sentence" being a list of words from that
+    sentence, as returned by PlainTextCorpusReader.sents(). 
     """
-    tags = nltk.tag.pos_tag(nltk.tokenize.word_tokenize(sentence),
-                            tagset='universal',
-                            lang='eng')
-    return [tag for tag in tags if tag[-1]]
+    tags = []
+    if isinstance(sentence, str):
+        # raw sentence as a string
+        tags = nltk.tag.pos_tag(nltk.tokenize.word_tokenize(sentence),
+                                tagset='universal',
+                                lang='eng')
+    elif isinstance(sentence, list):
+        # list of sentences, each sentence being a list of words.
+        tagged_sents = nltk.tag.pos_tag_sents(sentence,
+                                              tagset='universal',
+                                              lang='eng')
+        for tagged_sent in tagged_sents:
+            for tag in tagged_sent:
+                tags.append(tag)
+
+    return tags
 
 if __name__ == "__main__":
-    #generate_existing_lists()
+    generate_existing_lists()
     generate_custom_lists()
