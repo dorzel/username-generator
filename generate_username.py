@@ -2,6 +2,7 @@ import pickle
 import os
 from random import choice
 from sys import argv
+from difflib import get_close_matches
 
 # a dict of each corpus: {"corpus_name": corpus_dict, ...}
 corpora_dict = {}
@@ -24,15 +25,14 @@ def select_data(segment):
     char_mapping = {"V": "VERB", "N": "NOUN", "A": "ADJ"}
 
     if len(segment) > 1:
-        # trying to specify a certain corpus like "Pokemon-N"
+        # trying to specify a certain corpus like "pokemon-N"
         corpus_name = segment.split('-')[0]
         tag_type = segment.split('-')[-1]
         try:
             tag = choice(corpora_dict[corpus_name][char_mapping[tag_type]])
         except KeyError:
-            from difflib import get_close_matches
-            print("Could not find custom corpus '{}'. Did you mean: {}?"
-                  .format(corpus_name,
+            print("Could not find custom corpus in '{}'. Did you mean: {}?"
+                  .format(segment,
                           get_close_matches(corpus_name,
                                             list(corpora_dict.keys()))))
             tag = ""
