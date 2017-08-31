@@ -31,10 +31,14 @@ def select_data(segment):
         try:
             tag = choice(corpora_dict[corpus_name][char_mapping[tag_type]])
         except KeyError:
-            print("Could not find custom corpus in '{}'. Did you mean: {}?"
+            print("Could not find custom corpus specified in '{}'."
+                  " Did you mean: {}-{}?"
                   .format(segment,
                           get_close_matches(corpus_name,
-                                            list(corpora_dict.keys()))))
+                                            list(corpora_dict.keys())),
+                          get_close_matches(tag_type,
+                                            list(char_mapping.keys()),
+                                            cutoff=0)))
             tag = ""
         finally:
             return tag
