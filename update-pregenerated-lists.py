@@ -46,7 +46,7 @@ def generate_custom_lists():
             root="custom-corpora/{}/".format(dir),
             fileids=".*")
         # tokenize and tag sentences
-        tags = get_tags_sentence([item for item in custom_corpus.sents()])
+        tags = get_tags_sentence(list(custom_corpus.sents()))
         for tag in tags:
             custom_word_tags[tag[-1]].append(tag[0])
 
