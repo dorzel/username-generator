@@ -3,45 +3,90 @@ Username Generator
 
 Generates a random username given format from the user.
 
-You can specify what format you want to use
+You can specify what format you want to use by giving the order and type
+of chunks of the username.
+
+- A - Adjective
+- N - Noun
+- V - Verb
+
+## Getting started
+
+First we'll generate some pickle files that need to be in the
+`pre-generated-lists/` directory. This only needs to be done the first
+time or when you update a custom corpus.
+
+Run:
+
+- `pip install -r requirements.txt`
+- `python update-pregenerated-lists.py`
+
+This will generate tagged word lists for every built in corpus that is eligible in ntlk,
+as well as any custom corpus in `custom-corpora/`.
 
 
-sample output:
+
+## Sample output:
+
+By default, the username generated will be of the form AN, or AdjectiveNoun.
 
 ```
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-SuchBorat
+BronchialBargain
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-PlainPublications
+RelativeRefrigerator
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-TypicalChristians
+AngryMauch
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-MoralPic
+FirmerThought
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-SeriousSums
-dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-AshamedConductor
-dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-SexualCourse
-dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
-RacialRick
-dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py ANVN
-ObviousSuicideIsPhoto
-dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py ANVN
-ManyOperatorLocatedBusinesses
-dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py ANVN
-FeministCornersFeltDaisies
-dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py ANVN
-VariousWayPermitsFrankfurters
+AtomicRefrigeration
 ```
+
+You can also specify exactly what you want the username to look like:
+
+```
+dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py A N A N
+ManySympathyBiggerHotel
+dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py A N A N
+WaryAssistanceSameApproach
+dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py A N A N
+WrongGloriesScalarKatie
+```
+
+You can also specify A,N,V from a specific custom corpus (body of text)
+in the `custom-corpora/` directory. For instance, if I have a directory
+called `custom-corpora/pokemon/`, I can specify by:
+
+`python generate_username.py pokemon-N`
+or
+`python generate_username.py pokemon-V`
+
+```
+dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py A pokemon-N
+GladPikachu
+dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py A pokemon-N
+SubjectSquirtle
+dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py A pokemon-N
+CompetitivePokeballs
+dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py A pokemon-N
+MuchPokemart
+dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py A pokemon-N
+DefensiveBulbasaur
+```
+
+## Adding your own custom corpora
+
+If you would like to add a body of text to be collected and considered when creating a username,
+make a directory in `custom-corpora/`. Inside the directory you can create plain text files
+that contain any text you wish. The username generator will automatically tag the words in the
+text files upon a `python update-pregenerated-lists.py`.
 
 
 Ideas:
 
 - make a twitter bot that names animals when people post pictures of animals
-- be able to name types from different corporas, e.g.:
-    - `python generate_username.py A Pokemon-N N`
-    - `python generate_username.py N PetNames-V A`
 - be able to specify different types of usernames, e.g.: unusual, angry, happy
 - be able to set a part of the username beforehand:
     - `python generate_username.py A Dog NV`
+- output N names in a row, given by the user
