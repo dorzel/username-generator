@@ -28,7 +28,7 @@ as well as any custom corpus in `custom-corpora/`.
 
 ## Sample output:
 
-By default, the username generated will be of the form AN, or AdjectiveNoun.
+By default, the username generated will be of the form A N, or AdjectiveNoun.
 
 ```
 dorzel@nio-mbp-dorzel: username-generator$ python generate_username.py
@@ -80,7 +80,26 @@ DefensiveBulbasaur
 If you would like to add a body of text to be collected and considered when creating a username,
 make a directory in `custom-corpora/`. Inside the directory you can create plain text files
 that contain any text you wish. The username generator will automatically tag the words in the
-text files upon a `python update-pregenerated-lists.py`.
+text files upon a `python update-pregenerated-lists.py`. This works best if each line in the
+text files are whole sentences.
+
+
+### Scraping data into custom corpora
+
+In the `tools/` dir, there are different scripts that will scrape data into .txt files in the
+`custom-corpora/` dir.
+
+#### Reddit scraping tool
+
+To add data to the reddit custom corpus, run reddit_scrape_comments.py with the following arguments:
+
+`python reddit_scrape_comments.py <reddit_username> <reddit_password> <client_id> <client_secret>`
+
+`client_id` and `client_secret` can both be found (assuming you have created a reddit account) at:
+
+https://www.reddit.com/prefs/apps
+
+Create an app on that page and grab the secret and id from the page.
 
 
 Ideas:
