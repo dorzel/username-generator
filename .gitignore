@@ -1,3 +1,2 @@
-/custom-corpora/reddit/**/*.txt
-/custom-corpora/pokemon/**/*.txt
-/pregenerated-lists/**
+custom-corpora/*
+pregenerated-lists/*
