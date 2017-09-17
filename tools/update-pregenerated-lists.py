@@ -8,7 +8,7 @@ def generate_existing_lists():
     tag. This works on any existing corpora in nltk that are tagged.
     """
 
-    existing_word_tags = defaultdict(list)
+    existing_word_tags = defaultdict(set)
 
     # any corpus that has the .tagged_words() method and supports the universal
     # tagset can be used here
@@ -19,13 +19,14 @@ def generate_existing_lists():
         print("generating lists for '{}' corpus...".format(corpus_name))
         if corpus:
             for tag in corpus.tagged_words(tagset='universal'):
-                existing_word_tags[tag[-1]].append(tag[0])
+                existing_word_tags[tag[-1]].update([tag[0]])
         else:
             print("'{}' corpus not found. Downloading...".format(corpus_name))
             nltk.download(corpus_name)
+            continue
 
     # write results
-    with open("pre-generated-lists/existing_word_tags.pkl", "wb") as outfile:
+    with open("../pre-generated-lists/existing_word_tags.pkl", "wb") as outfile:
         pickle.dump(existing_word_tags, outfile)
 
     print("Done. {} total words saved".format(
@@ -39,19 +40,19 @@ def generate_custom_lists():
     from nltk.corpus import PlaintextCorpusReader
     import os
 
-    for dir in os.listdir("custom-corpora/"):
+    for dir in os.listdir("../custom-corpora/"):
         print("generating list for custom corpus '{}'".format(dir))
-        custom_word_tags = defaultdict(list)
+        custom_word_tags = defaultdict(set)
         custom_corpus = PlaintextCorpusReader(
-            root="custom-corpora/{}/".format(dir),
+            root="../custom-corpora/{}/".format(dir),
             fileids=".*")
         # tokenize and tag sentences
         tags = get_tags_sentence(list(custom_corpus.sents()))
         for tag in tags:
-            custom_word_tags[tag[-1]].append(tag[0])
+            custom_word_tags[tag[-1]].update([tag[0]])
 
         # write results
-        with open("pre-generated-lists/custom_word_tags_{}.pkl".format(dir),
+        with open("../pre-generated-lists/custom_word_tags_{}.pkl".format(dir),
                   "wb") as outfile:
             pickle.dump(custom_word_tags, outfile)
 

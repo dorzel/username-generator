@@ -73,6 +73,7 @@ class SubredditCommentScraper:
             for comment in self.reddit.subreddit(self.subreddit).stream.comments():
                 self._write_comment(comment.body)
         except KeyboardInterrupt:
+            self.file_object.close()
             print("Done.")
 
 if __name__ == "__main__":

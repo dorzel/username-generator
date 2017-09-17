@@ -1,5 +1,5 @@
 import sys
-from .reddit_scrape_all_comments import SubredditCommentScraper
+from reddit_scrape_all_comments import SubredditCommentScraper
 
 
 class PokemonCommentScraper(SubredditCommentScraper):
