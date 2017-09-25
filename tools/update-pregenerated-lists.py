@@ -18,12 +18,17 @@ def generate_existing_lists():
         corpus = getattr(nltk.corpus, corpus_name, False)
         print("generating lists for '{}' corpus...".format(corpus_name))
         if corpus:
-            for tag in corpus.tagged_words(tagset='universal'):
-                existing_word_tags[tag[-1]].update([tag[0]])
+            try:
+                nltk.data.find("corpora/{}".format(corpus_name))
+            except LookupError:
+                print("'{}' corpus not found. Downloading...".format(corpus_name))
+                nltk.download(corpus_name)
+                continue
+            else:
+                for tag in corpus.tagged_words(tagset='universal'):
+                    existing_word_tags[tag[-1]].update([tag[0]])
         else:
-            print("'{}' corpus not found. Downloading...".format(corpus_name))
-            nltk.download(corpus_name)
-            continue
+            print("Could not find corpus {} in nltk package.".format(corpus_name))
 
     # write results
     with open("../pre-generated-lists/existing_word_tags.pkl", "wb") as outfile:
