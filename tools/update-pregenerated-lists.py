@@ -67,26 +67,33 @@ def generate_custom_lists():
     from nltk.corpus import PlaintextCorpusReader
     import os
 
-    for dir in os.listdir("../custom-corpora/"):
-        print("generating list for custom corpus '{}'".format(dir))
-        custom_word_tags = defaultdict(set)
-        custom_corpus = PlaintextCorpusReader(
-            root="../custom-corpora/{}/".format(dir),
-            fileids=".*")
-        # tokenize and tag sentences
-        tags = get_tags_sentence(list(custom_corpus.sents()))
-        for tag in tags:
-            custom_word_tags[tag[-1]].update([tag[0]])
+    for dir in os.scandir("../custom-corpora/"):
+        if dir.is_dir():
+            print("generating list for custom corpus '{}'".format(dir.name))
+            custom_word_tags = defaultdict(set)
+            custom_corpus = PlaintextCorpusReader(
+                root="../custom-corpora/{}/".format(dir.name),
+                fileids=".*")
 
-        # write results
-        with open("../pre-generated-lists/custom_word_tags_{}.pkl".format(dir),
-                  "wb") as outfile:
-            pickle.dump(custom_word_tags, outfile)
+            # tokenize and tag sentences
+            try:
+                tags = get_tags_sentence(list(custom_corpus.sents()))
+            except ValueError:
+                print("No sentences found for corpus '{0}'. Did you place your text "
+                      "files inside of /custom-corpora/{0}/ ?".format(dir.name))
+            else:
+                for tag in tags:
+                    custom_word_tags[tag[-1]].update([tag[0]])
 
-        print("Completed dumping of `{}` custom corpus. {} total words saved"
-              .format(dir,
-                      sum([len(values) for values in custom_word_tags.values()]
-                          )))
+            # write results, dump .pkl regardless if empty
+            with open("../pre-generated-lists/custom_word_tags_{}.pkl".format(dir.name),
+                      "wb") as outfile:
+                pickle.dump(custom_word_tags, outfile)
+
+            print("Completed dumping of `{}` custom corpus. {} total words saved"
+                  .format(dir.name,
+                          sum([len(values) for values in custom_word_tags.values()]
+                              )))
 
 
 def get_tags_sentence(sentence):
