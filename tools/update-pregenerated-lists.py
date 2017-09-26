@@ -3,6 +3,28 @@ import pickle
 from collections import defaultdict
 
 
+
+def download_tagger_tokenizer():
+    """ Assure that the tagger, tokenizer, and universal tagset needed to parse
+    custom corpora are installed.
+    """
+    try:
+        nltk.data.find("taggers/averaged_perceptron_tagger")
+    except LookupError:
+        print("tagger not found, downloading...")
+        nltk.download("averaged_perceptron_tagger")
+    try:
+        nltk.data.find("tokenizers/punkt")
+    except LookupError:
+        print("tokenizer not found, downloading...")
+        nltk.download("punkt")
+    try:
+        nltk.data.find("taggers/universal_tagset")
+    except LookupError:
+        print("tagset not found, downloading...")
+        nltk.download("universal_tagset")
+
+
 def generate_existing_lists():
     """ Populate a dictionary of types of tags with words that belong to that
     tag. This works on any existing corpora in nltk that are tagged.
@@ -91,5 +113,6 @@ def get_tags_sentence(sentence):
     return tags
 
 if __name__ == "__main__":
+    download_tagger_tokenizer()
     generate_existing_lists()
     generate_custom_lists()
