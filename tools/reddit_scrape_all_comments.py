@@ -17,8 +17,12 @@ class SubredditCommentScraper:
         self.max_file_size_bytes = 10000000  # 10MB
         self.base_dir = "../custom-corpora/reddit/{}"
         self.reddit = None
+        self.fetched_comments = 0
 
     def _set_file_object(self):
+        if not os.path.exists(self.base_dir.format("")):
+            print("Directory not found: '{}' creating...".format(self.base_dir.format("")))
+            os.mkdir(self.base_dir.format(""))
         for file in os.listdir(self.base_dir.format("")):
             if os.stat(self.base_dir.format(file)).st_size < self.max_file_size_bytes \
                     and file.endswith(".txt"):
@@ -45,7 +49,8 @@ class SubredditCommentScraper:
         else:
             # return a new file for writing if all files in the directory are
             # already at max size or no files yet exist
-            self.file_object.close()
+            if self.file_object is not None:
+                self.file_object.close()
             self.file_object = open(self.base_dir
                                     .format(str(uuid4()) + '.txt'), "w")
             print("Opening new file for writing: {}"
@@ -60,6 +65,9 @@ class SubredditCommentScraper:
                      len(sentence.split()) > 1]
         for sentence in sentences:
             self.file_object.write(sentence + "\n")
+
+        self.fetched_comments += 1
+        print("Wrote {} comments".format(self.fetched_comments), end="\r")
 
     def start(self):
         self.reddit = praw.Reddit(
@@ -77,13 +85,17 @@ class SubredditCommentScraper:
             print("Done.")
 
 if __name__ == "__main__":
-    username = sys.argv[1]
-    password = sys.argv[2]
-    client_id = sys.argv[3]
-    client_secret = sys.argv[4]
-    s1 = SubredditCommentScraper(subreddit="all",
-                                 username=username,
-                                 password=password,
-                                 client_id=client_id,
-                                 client_secret=client_secret)
-    s1.start()
+    try:
+        username = sys.argv[1]
+        password = sys.argv[2]
+        client_id = sys.argv[3]
+        client_secret = sys.argv[4]
+    except:
+        print("Usage: <username> <password> <client_id> <client_secret>")
+    else:
+        s1 = SubredditCommentScraper(subreddit="all",
+                                     username=username,
+                                     password=password,
+                                     client_id=client_id,
+                                     client_secret=client_secret)
+        s1.start()

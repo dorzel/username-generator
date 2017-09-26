@@ -4,7 +4,7 @@ from random import sample, choice
 from sys import argv
 from difflib import get_close_matches
 
-# a dict of each corpus: {"corpus_name": corpus_dict, ...}
+# a dict of each corpus: {"corpus_name": {"NOUN": set(), "VERB": set()...}, ...}
 corpora_dict = {}
 
 
