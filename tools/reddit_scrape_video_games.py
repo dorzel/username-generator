@@ -18,7 +18,7 @@ if __name__ == "__main__":
     except:
         print("Usage: <username> <password> <client_id> <client_secret>")
     else:
-        v1 = VideoGamesCommentScraper(subreddit="pokemon",
+        v1 = VideoGamesCommentScraper(subreddit="games",
                                       username=username,
                                       password=password,
                                       client_id=client_id,
