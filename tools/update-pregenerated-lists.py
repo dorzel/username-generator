@@ -1,31 +1,32 @@
 import nltk
 import pickle
+import os
 from collections import defaultdict
 
 
 
-def download_tagger_tokenizer():
+def download_tagger_tokenizer(data_dir):
     """ Assure that the tagger, tokenizer, and universal tagset needed to parse
     custom corpora are installed.
     """
     try:
-        nltk.data.find("taggers/averaged_perceptron_tagger")
+        nltk.data.find("taggers/averaged_perceptron_tagger", paths=[data_dir])
     except LookupError:
         print("tagger not found, downloading...")
-        nltk.download("averaged_perceptron_tagger")
+        nltk.download("averaged_perceptron_tagger", download_dir=data_dir)
     try:
-        nltk.data.find("tokenizers/punkt")
+        nltk.data.find("tokenizers/punkt", paths=[data_dir])
     except LookupError:
         print("tokenizer not found, downloading...")
-        nltk.download("punkt")
+        nltk.download("punkt", download_dir=data_dir)
     try:
-        nltk.data.find("taggers/universal_tagset")
+        nltk.data.find("taggers/universal_tagset", paths=[data_dir])
     except LookupError:
         print("tagset not found, downloading...")
-        nltk.download("universal_tagset")
+        nltk.download("universal_tagset", download_dir=data_dir)
 
 
-def generate_existing_lists():
+def generate_existing_lists(data_dir):
     """ Populate a dictionary of types of tags with words that belong to that
     tag. This works on any existing corpora in nltk that are tagged.
     """
@@ -41,10 +42,10 @@ def generate_existing_lists():
         print("generating lists for '{}' corpus...".format(corpus_name))
         if corpus:
             try:
-                nltk.data.find("corpora/{}".format(corpus_name))
+                nltk.data.find("corpora/{}".format(corpus_name), paths=[data_dir])
             except LookupError:
                 print("'{}' corpus not found. Downloading...".format(corpus_name))
-                nltk.download(corpus_name)
+                nltk.download(corpus_name, download_dir=data_dir)
                 continue
             else:
                 for tag in corpus.tagged_words(tagset='universal'):
@@ -120,6 +121,7 @@ def get_tags_sentence(sentence):
     return tags
 
 if __name__ == "__main__":
-    download_tagger_tokenizer()
-    generate_existing_lists()
+    data_dir = os.path.abspath(os.path.join(__file__, "../../nltk_data/"))
+    download_tagger_tokenizer(data_dir)
+    generate_existing_lists(data_dir)
     generate_custom_lists()
