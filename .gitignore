@@ -1,3 +1,4 @@
 pre-generated-lists/*.pkl
 custom-corpora/*.txt
 *__pycache__/
+nltk_data/
