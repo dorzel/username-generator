@@ -4,7 +4,6 @@ import os
 from collections import defaultdict
 
 
-
 def download_tagger_tokenizer(data_dir):
     """ Assure that the tagger, tokenizer, and universal tagset needed to parse
     custom corpora are installed.
@@ -119,6 +118,7 @@ def get_tags_sentence(sentence):
                 tags.append(tag)
 
     return tags
+
 
 if __name__ == "__main__":
     data_dir = os.path.abspath(os.path.join(__file__, "../../nltk_data/"))
