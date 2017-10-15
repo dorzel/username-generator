@@ -62,6 +62,7 @@ def generate_username(name_format):
 
     return username
 
+
 if __name__ == "__main__":
     if len(argv) > 1:
         name_format = argv[1:]

@@ -36,7 +36,7 @@ def generate_existing_lists(data_dir):
     # tagset can be used here
     # TODO: make this a general loop instead of having to name all corpora
     for corpus_name in ["treebank", "brown", "nps_chat", "masc_tagged",
-                        "switchboard", "timit_tagged"]:
+                        "switchboard"]:
         corpus = getattr(nltk.corpus, corpus_name, False)
         print("generating lists for '{}' corpus...".format(corpus_name))
         if corpus:
@@ -96,8 +96,8 @@ def generate_custom_lists():
 
             print("Completed dumping of `{}` custom corpus. {} total words "
                   "saved".format(dir.name,
-                          sum([len(values) for values in custom_word_tags.values()]
-                              )))
+                                 sum([len(values) for values in
+                                      custom_word_tags.values()])))
 
 
 def get_tags_sentence(sentence):
@@ -126,6 +126,7 @@ def get_tags_sentence(sentence):
 
 if __name__ == "__main__":
     data_dir = os.path.abspath(os.path.join(__file__, "../../nltk_data/"))
+    nltk.data.path = [data_dir]
     download_tagger_tokenizer(data_dir)
     generate_existing_lists(data_dir)
     generate_custom_lists()
