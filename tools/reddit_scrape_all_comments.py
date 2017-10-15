@@ -82,7 +82,10 @@ class SubredditCommentScraper:
                 self._write_comment(comment.body)
         except KeyboardInterrupt:
             self.file_object.close()
+            # print once to print done on the line below the \r
+            print()
             print("Done.")
+
 
 if __name__ == "__main__":
     try:

@@ -41,16 +41,19 @@ def generate_existing_lists(data_dir):
         print("generating lists for '{}' corpus...".format(corpus_name))
         if corpus:
             try:
-                nltk.data.find("corpora/{}".format(corpus_name), paths=[data_dir])
+                nltk.data.find("corpora/{}".format(corpus_name),
+                               paths=[data_dir])
             except LookupError:
-                print("'{}' corpus not found. Downloading...".format(corpus_name))
+                print("'{}' corpus not found. Downloading..."
+                      .format(corpus_name))
                 nltk.download(corpus_name, download_dir=data_dir)
                 continue
             else:
                 for tag in corpus.tagged_words(tagset='universal'):
                     existing_word_tags[tag[-1]].update([tag[0]])
         else:
-            print("Could not find corpus {} in nltk package.".format(corpus_name))
+            print("Could not find corpus {} in nltk package."
+                  .format(corpus_name))
 
     # write results
     with open("../pre-generated-lists/existing_word_tags.pkl", "wb") as outfile:
@@ -79,19 +82,20 @@ def generate_custom_lists():
             try:
                 tags = get_tags_sentence(list(custom_corpus.sents()))
             except ValueError:
-                print("No sentences found for corpus '{0}'. Did you place your text "
-                      "files inside of /custom-corpora/{0}/ ?".format(dir.name))
+                print("No sentences found for corpus '{0}'. Did you place your"
+                      " text files inside of /custom-corpora/{0}/ ?"
+                      .format(dir.name))
             else:
                 for tag in tags:
                     custom_word_tags[tag[-1]].update([tag[0]])
 
             # write results, dump .pkl regardless if empty
-            with open("../pre-generated-lists/custom_word_tags_{}.pkl".format(dir.name),
-                      "wb") as outfile:
+            with open("../pre-generated-lists/custom_word_tags_{}.pkl"
+                      .format(dir.name), "wb") as outfile:
                 pickle.dump(custom_word_tags, outfile)
 
-            print("Completed dumping of `{}` custom corpus. {} total words saved"
-                  .format(dir.name,
+            print("Completed dumping of `{}` custom corpus. {} total words "
+                  "saved".format(dir.name,
                           sum([len(values) for values in custom_word_tags.values()]
                               )))
 
