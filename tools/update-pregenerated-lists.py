@@ -46,7 +46,11 @@ def generate_existing_lists(data_dir):
             except LookupError:
                 print("'{}' corpus not found. Downloading..."
                       .format(corpus_name))
+
                 nltk.download(corpus_name, download_dir=data_dir)
+                for tag in corpus.tagged_words(tagset='universal'):
+                    existing_word_tags[tag[-1]].update([tag[0]])
+
                 continue
             else:
                 for tag in corpus.tagged_words(tagset='universal'):
