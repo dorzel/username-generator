@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import pickle
 import os
 from random import sample, choice
