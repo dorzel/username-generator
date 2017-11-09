@@ -1,31 +1,31 @@
 import nltk
 import pickle
+import os
 from collections import defaultdict
 
 
-
-def download_tagger_tokenizer():
+def download_tagger_tokenizer(data_dir):
     """ Assure that the tagger, tokenizer, and universal tagset needed to parse
     custom corpora are installed.
     """
     try:
-        nltk.data.find("taggers/averaged_perceptron_tagger")
+        nltk.data.find("taggers/averaged_perceptron_tagger", paths=[data_dir])
     except LookupError:
         print("tagger not found, downloading...")
-        nltk.download("averaged_perceptron_tagger")
+        nltk.download("averaged_perceptron_tagger", download_dir=data_dir)
     try:
-        nltk.data.find("tokenizers/punkt")
+        nltk.data.find("tokenizers/punkt", paths=[data_dir])
     except LookupError:
         print("tokenizer not found, downloading...")
-        nltk.download("punkt")
+        nltk.download("punkt", download_dir=data_dir)
     try:
-        nltk.data.find("taggers/universal_tagset")
+        nltk.data.find("taggers/universal_tagset", paths=[data_dir])
     except LookupError:
         print("tagset not found, downloading...")
-        nltk.download("universal_tagset")
+        nltk.download("universal_tagset", download_dir=data_dir)
 
 
-def generate_existing_lists():
+def generate_existing_lists(data_dir):
     """ Populate a dictionary of types of tags with words that belong to that
     tag. This works on any existing corpora in nltk that are tagged.
     """
@@ -36,21 +36,24 @@ def generate_existing_lists():
     # tagset can be used here
     # TODO: make this a general loop instead of having to name all corpora
     for corpus_name in ["treebank", "brown", "nps_chat", "masc_tagged",
-                        "switchboard", "timit_tagged"]:
+                        "switchboard"]:
         corpus = getattr(nltk.corpus, corpus_name, False)
         print("generating lists for '{}' corpus...".format(corpus_name))
         if corpus:
             try:
-                nltk.data.find("corpora/{}".format(corpus_name))
+                nltk.data.find("corpora/{}".format(corpus_name),
+                               paths=[data_dir])
             except LookupError:
-                print("'{}' corpus not found. Downloading...".format(corpus_name))
-                nltk.download(corpus_name)
+                print("'{}' corpus not found. Downloading..."
+                      .format(corpus_name))
+                nltk.download(corpus_name, download_dir=data_dir)
                 continue
             else:
                 for tag in corpus.tagged_words(tagset='universal'):
                     existing_word_tags[tag[-1]].update([tag[0]])
         else:
-            print("Could not find corpus {} in nltk package.".format(corpus_name))
+            print("Could not find corpus {} in nltk package."
+                  .format(corpus_name))
 
     # write results
     with open("../pre-generated-lists/existing_word_tags.pkl", "wb") as outfile:
@@ -79,21 +82,22 @@ def generate_custom_lists():
             try:
                 tags = get_tags_sentence(list(custom_corpus.sents()))
             except ValueError:
-                print("No sentences found for corpus '{0}'. Did you place your text "
-                      "files inside of /custom-corpora/{0}/ ?".format(dir.name))
+                print("No sentences found for corpus '{0}'. Did you place your"
+                      " text files inside of /custom-corpora/{0}/ ?"
+                      .format(dir.name))
             else:
                 for tag in tags:
                     custom_word_tags[tag[-1]].update([tag[0]])
 
             # write results, dump .pkl regardless if empty
-            with open("../pre-generated-lists/custom_word_tags_{}.pkl".format(dir.name),
-                      "wb") as outfile:
+            with open("../pre-generated-lists/custom_word_tags_{}.pkl"
+                      .format(dir.name), "wb") as outfile:
                 pickle.dump(custom_word_tags, outfile)
 
-            print("Completed dumping of `{}` custom corpus. {} total words saved"
-                  .format(dir.name,
-                          sum([len(values) for values in custom_word_tags.values()]
-                              )))
+            print("Completed dumping of `{}` custom corpus. {} total words "
+                  "saved".format(dir.name,
+                                 sum([len(values) for values in
+                                      custom_word_tags.values()])))
 
 
 def get_tags_sentence(sentence):
@@ -119,7 +123,10 @@ def get_tags_sentence(sentence):
 
     return tags
 
+
 if __name__ == "__main__":
-    download_tagger_tokenizer()
-    generate_existing_lists()
+    data_dir = os.path.abspath(os.path.join(__file__, "../../nltk_data/"))
+    nltk.data.path = [data_dir]
+    download_tagger_tokenizer(data_dir)
+    generate_existing_lists(data_dir)
     generate_custom_lists()

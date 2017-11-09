@@ -1,10 +1,13 @@
+#!/usr/bin/env python
+
 import pickle
 import os
 from random import sample, choice
 from sys import argv
 from difflib import get_close_matches
 
-# a dict of each corpus: {"corpus_name": {"NOUN": set(), "VERB": set()...}, ...}
+# a dict of each corpus:
+# {"corpus_name": {"NOUN": set(), "VERB": set()...}, ...}
 corpora_dict = {}
 
 
@@ -13,7 +16,8 @@ def load_corpus_pickles():
         if filename.endswith(".pkl"):
             corpus_name = filename.split("_")[-1].rstrip(".pkl")
             # assuming pkl has a single defaultdict inside
-            with open("pre-generated-lists/{}".format(filename), "rb") as tag_pickle:
+            with open("pre-generated-lists/{}".format(filename), "rb") as \
+                    tag_pickle:
                 corpus_dict = pickle.load(tag_pickle)
                 corpora_dict[corpus_name] = corpus_dict
 
@@ -61,6 +65,7 @@ def generate_username(name_format):
         username = username + name_chunk.capitalize()
 
     return username
+
 
 if __name__ == "__main__":
     if len(argv) > 1:
