@@ -1,4 +1,5 @@
 pre-generated-lists/*.pkl
-custom-corpora/*.txt
+custom-corpora/*
 *__pycache__/
 nltk_data/
+!.gitkeep
