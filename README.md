@@ -101,11 +101,11 @@ https://www.reddit.com/prefs/apps
 
 Create an app on that page and grab the secret and id from the page.
 
+## Docker
 
-Ideas:
+You can build a docker container of the app with:
 
-- make a twitter bot that names animals when people post pictures of animals
-- be able to specify different types of usernames, e.g.: unusual, angry, happy
-- be able to set a part of the username beforehand:
-    - `python generate_username.py A Dog NV`
-- output N names in a row, given by the user
+```
+docker build -t username-generator -f Dockerfile .
+docker run username-generator
+```
