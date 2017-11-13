@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 import platform
 import praw
 from uuid import uuid4
@@ -15,7 +15,8 @@ class SubredditCommentScraper:
         self.client_secret = client_secret
         self.file_object = None
         self.max_file_size_bytes = 10000000  # 10MB
-        self.base_dir = "../custom-corpora/reddit/{}"
+        self.base_dir = os.path.abspath(
+            os.path.join(__file__, "../../custom-corpora/reddit/{}"))
         self.reddit = None
         self.fetched_comments = 0
 

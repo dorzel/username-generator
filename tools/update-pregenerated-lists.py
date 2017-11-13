@@ -25,7 +25,7 @@ def download_tagger_tokenizer(data_dir):
         nltk.download("universal_tagset", download_dir=data_dir)
 
 
-def generate_existing_lists(data_dir):
+def generate_existing_lists(data_dir, project_dir):
     """ Populate a dictionary of types of tags with words that belong to that
     tag. This works on any existing corpora in nltk that are tagged.
     """
@@ -60,26 +60,27 @@ def generate_existing_lists(data_dir):
                   .format(corpus_name))
 
     # write results
-    with open("../pre-generated-lists/existing_word_tags.pkl", "wb") as outfile:
+    with open("{}/pre-generated-lists/existing_word_tags.pkl"
+              .format(project_dir), "wb") as outfile:
         pickle.dump(existing_word_tags, outfile)
 
     print("Done. {} total words saved".format(
         sum([len(values) for values in existing_word_tags.values()])))
 
 
-def generate_custom_lists():
+def generate_custom_lists(project_dir):
     """ Same as generate_existing_lists, but on custom corpora that reside in
     root/custom_corpora. Write a pickle file for each corpus. 
     """
     from nltk.corpus import PlaintextCorpusReader
     import os
 
-    for dir in os.scandir("../custom-corpora/"):
+    for dir in os.scandir("{}/custom-corpora/".format(project_dir)):
         if dir.is_dir():
             print("generating list for custom corpus '{}'".format(dir.name))
             custom_word_tags = defaultdict(set)
             custom_corpus = PlaintextCorpusReader(
-                root="../custom-corpora/{}/".format(dir.name),
+                root="{}/custom-corpora/{}/".format(project_dir, dir.name),
                 fileids=".*")
 
             # tokenize and tag sentences
@@ -94,8 +95,8 @@ def generate_custom_lists():
                     custom_word_tags[tag[-1]].update([tag[0]])
 
             # write results, dump .pkl regardless if empty
-            with open("../pre-generated-lists/custom_word_tags_{}.pkl"
-                      .format(dir.name), "wb") as outfile:
+            with open("{}/custom_word_tags_{}.pkl"
+                      .format(project_dir, dir.name), "wb") as outfile:
                 pickle.dump(custom_word_tags, outfile)
 
             print("Completed dumping of `{}` custom corpus. {} total words "
@@ -129,8 +130,9 @@ def get_tags_sentence(sentence):
 
 
 if __name__ == "__main__":
-    data_dir = os.path.abspath(os.path.join(__file__, "../../nltk_data/"))
+    project_dir = os.path.abspath(os.path.join(__file__, "../../"))
+    data_dir = os.path.abspath(os.path.join(project_dir, "nltk_data/"))
     nltk.data.path = [data_dir]
     download_tagger_tokenizer(data_dir)
-    generate_existing_lists(data_dir)
-    generate_custom_lists()
+    generate_existing_lists(data_dir, project_dir)
+    generate_custom_lists(project_dir)
