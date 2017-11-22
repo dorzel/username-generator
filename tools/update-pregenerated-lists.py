@@ -95,7 +95,7 @@ def generate_custom_lists(project_dir):
                     custom_word_tags[tag[-1]].update([tag[0]])
 
             # write results, dump .pkl regardless if empty
-            with open("{}/custom_word_tags_{}.pkl"
+            with open("{}/pre-generated-lists/custom_word_tags_{}.pkl"
                       .format(project_dir, dir.name), "wb") as outfile:
                 pickle.dump(custom_word_tags, outfile)
 
